@@ -1,0 +1,51 @@
+-- Create Database
+CREATE DATABASE EMRSRecruitment;
+
+-- Use the Database
+USE EMRSRecruitment;
+
+-- Table for Personal Information
+CREATE TABLE PersonalInfo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(255) NOT NULL,
+    father_name VARCHAR(255) NOT NULL,
+    dob DATE NOT NULL,
+    community ENUM('SC', 'ST', 'BC', 'OC') NOT NULL,
+    address TEXT NOT NULL,
+    mobile VARCHAR(15) NOT NULL
+);
+
+-- Table for Academic Qualifications
+CREATE TABLE AcademicQualifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    applicant_id INT NOT NULL,
+    degree ENUM('Undergraduate', 'Postgraduate') NOT NULL,
+    max_marks INT NOT NULL,
+    secured_marks INT NOT NULL,
+    percentage DECIMAL(5, 2) AS (secured_marks * 100.0 / max_marks) STORED,
+    FOREIGN KEY (applicant_id) REFERENCES PersonalInfo(id) ON DELETE CASCADE
+);
+
+-- Table for Professional Qualifications
+CREATE TABLE ProfessionalQualifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    applicant_id INT NOT NULL,
+    qualification ENUM('B.Ed', 'M.Ed', 'TET') NOT NULL,
+    max_marks INT NOT NULL,
+    secured_marks INT NOT NULL,
+    percentage DECIMAL(5, 2) AS (secured_marks * 100.0 / max_marks) STORED,
+    FOREIGN KEY (applicant_id) REFERENCES PersonalInfo(id) ON DELETE CASCADE
+);
+
+-- Table for Work Experience
+CREATE TABLE WorkExperience (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    applicant_id INT NOT NULL,
+    organization_name VARCHAR(255) NOT NULL,
+    designation VARCHAR(255) NOT NULL,
+    employment_type ENUM('Full-Time', 'Part-Time') NOT NULL,
+    from_date DATE NOT NULL,
+    to_date DATE NOT NULL,
+    remarks TEXT,
+    FOREIGN KEY (applicant_id) REFERENCES PersonalInfo(id) ON DELETE CASCADE
+);
